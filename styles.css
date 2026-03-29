@@ -398,6 +398,53 @@ section h2 {
     padding-left: 0;
 }
 
+/* Footer contactos */
+footer {
+    background: #212E36;
+    color: #A0A7AC;
+    text-align: center;
+    padding: 18px 20px;
+    font-size: 0.95em;
+    border-top: 1px solid #2A3B47;
+}
+
+.footer-contacts {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: #52A5E0;
+    border: 1px solid #52A5E0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.contact-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+.contact-btn:hover {
+    background: #52A5E0;
+    color: #212E36;
+}
+
+@media (max-width: 480px) {
+    .footer-contacts { flex-direction: column; gap: 6px; }
+}
+
 .structure-list li {
     padding: 12px 0;
     color: #cccccc;
