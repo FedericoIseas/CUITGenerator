@@ -1,5 +1,11 @@
-// Elemento donde se mostrarán los CUITs
+// Elementos del DOM
 const cuitSpan = document.getElementById('cuit');
+const mensajeDiv = document.getElementById('mensaje');
+const cuitsList = document.querySelector('.cuits-list');
+
+// Almacenar CUITs copiados para notificaciones
+let cuitsCopiadosEnEstaSesion = new Set();
+let cuitsActuales = [];
 
 /**
  * Calcula el dígito verificador del CUIT
@@ -53,30 +59,89 @@ function generar() {
 }
 
 /**
- * Genera 5 CUITs válidos diferentes
+ * Muestra un mensaje en el sitio
+ * @param {string} texto - Texto del mensaje
+ * @param {string} tipo - Tipo de mensaje: 'exito', 'error', 'info'
  */
-function generarMultiples() {
-    const cuits = [];
-    for (let i = 0; i < 5; i++) {
-        cuits.push(generar());
-    }
-    cuitSpan.textContent = cuits.join('\n');
+function mostrarMensaje(texto, tipo = 'info') {
+    mensajeDiv.textContent = texto;
+    mensajeDiv.className = `mensaje-container mensaje-${tipo}`;
+    
+    // Limpiar mensaje después de 3 segundos
+    setTimeout(() => {
+        mensajeDiv.textContent = '';
+        mensajeDiv.className = 'mensaje-container';
+    }, 3000);
 }
 
 /**
- * Copia todos los CUITs al portapapeles
+ * Copia un CUIT individual al portapapeles
+ * @param {string} cuit - El CUIT a copiar
+ * @param {number} indice - El índice del CUIT en la lista
  */
-function copiarAlPortapapeles() {
-    const cuits = cuitSpan.textContent.trim();
-
-    if (cuits === 'Haz clic en "Generar 5 CUITs válidos"') {
-        alert('⚠️ Primero debes generar los CUITs');
-        return;
-    }
-
-    navigator.clipboard.writeText(cuits).then(() => {
-        alert('✅ CUITs copiados al portapapeles');
+function copiarCuit(cuit, indice) {
+    navigator.clipboard.writeText(cuit).then(() => {
+        // Marcar como copiado
+        cuitsCopiadosEnEstaSesion.add(cuit);
+        
+        // Actualizar el mensaje
+        const mensaje = `✅ ${cuit} copiado al portapapeles`;
+        mostrarMensaje(mensaje, 'exito');
+        
+        // Actualizar el botón para mostrar que ya fue copiado
+        const btn = document.querySelector(`.copy-cuit-btn[data-index="${indice}"]`);
+        if (btn) {
+            btn.classList.add('ya-copiado');
+            btn.textContent = '✅ Copiado';
+        }
     }).catch(() => {
-        alert('❌ Error al copiar al portapapeles');
+        mostrarMensaje('❌ Error al copiar al portapapeles', 'error');
     });
 }
+
+/**
+ * Genera 5 CUITs válidos diferentes y los muestra con botones de copiar individuales
+ */
+function generarMultiples() {
+    cuitsActuales = [];
+    for (let i = 0; i < 6; i++) {
+        cuitsActuales.push(generar());
+    }
+    
+    // Limpiar lista anterior
+    cuitsList.innerHTML = '';
+    
+    // Crear elementos para cada CUIT
+    cuitsActuales.forEach((cuit, indice) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cuit-item';
+        
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'cuit-header';
+        
+        const cuitSpanElement = document.createElement('span');
+        cuitSpanElement.className = 'cuit-texto';
+        cuitSpanElement.textContent = cuit;
+        
+        const copiarBtn = document.createElement('button');
+        copiarBtn.className = `copy-cuit-btn ${cuitsCopiadosEnEstaSesion.has(cuit) ? 'ya-copiado' : ''}`;
+        copiarBtn.textContent = cuitsCopiadosEnEstaSesion.has(cuit) ? '✅' : '📋 Copiar';
+        copiarBtn.setAttribute('data-index', indice);
+        copiarBtn.onclick = () => copiarCuit(cuit, indice);
+        copiarBtn.title = 'Copiar este CUIT';
+        
+        headerDiv.appendChild(cuitSpanElement);
+        headerDiv.appendChild(copiarBtn);
+        itemDiv.appendChild(headerDiv);
+        cuitsList.appendChild(itemDiv);
+    });
+    
+    mostrarMensaje('✨ 6 CUITs generados correctamente', 'exito');
+}
+
+/**
+ * Se ejecuta cuando carga la página
+ */
+window.addEventListener('load', () => {
+    generarMultiples();
+});
