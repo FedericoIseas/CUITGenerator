@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Generador de CUIT - Testing</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 Generador de CUIT</h1>
+            <p class="subtitle">Crea CUITs válidos para realizar pruebas y tests</p>
+        </header>
+
+        <main>
+            <section class="generator-section">
+                <h2>Generar CUIT (5 CUITs por vez)</h2>
+                <div class="mother">
+                    <button onclick="generarMultiples()" class="generate-btn">
+                        ⚡ Generar 5 CUITs válidos
+                    </button>
+                    <pre id="cuit" class="cuit-display">Haz clic en "Generar 5 CUITs válidos"</pre>
+                </div>
+                <button onclick="copiarAlPortapapeles()" class="copy-btn">
+                    📋 Copiar todos
+                </button>
+            </section>
+
+            <section class="info-section">
+                <h2>¿Qué es un CUIT?</h2>
+                <p>El Código Único de Identificación Tributaria (CUIT) es el identificador fiscal argentino. 
+                   Consta de 11 dígitos con formato <code>XX-XXXXXXXX-X</code> donde el último dígito es verificador.</p>
+            </section>
+
+            <section class="info-section">
+                <h2>Características</h2>
+                <ul>
+                    <li>✅ Generación de CUITs con formato válido</li>
+                    <li>✅ Dígito verificador calculado correctamente</li>
+                    <li>✅ Ideales para testing y desarrollo</li>
+                    <li>✅ Interfaz simple y responsive</li>
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>Generador de CUIT para Testing - 2026</p>
+        </footer>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
